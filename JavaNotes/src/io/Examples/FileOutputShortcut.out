@@ -1,0 +1,28 @@
+1: package Examples;
+2: 
+3: import java.io.BufferedReader;
+4: import java.io.IOException;
+5: import java.io.PrintWriter;
+6: import java.io.StringReader;
+7: 
+8: /**
+9:  * 文本文件输出的快捷方式
+10:  */
+11: public class FileOutputShortcut
+12: {
+13:     static String inputFile = "./IO/src/Examples/FileOutputShortcut.java";
+14:     static String outputFile = "./IO/src/Examples/FileOutputShortcut.out";
+15: 
+16:     public static void main(String[] args) throws IOException
+17:     {
+18:         BufferedReader in = new BufferedReader(new StringReader(BufferedInputFile.read(inputFile)));
+19:         // Here's the shorcut:
+20:         PrintWriter out = new PrintWriter(outputFile);
+21:         int lineCount = 1;
+22:         String s;
+23:         while ((s = in.readLine()) != null)
+24:             out.println(lineCount++ + ": " + s);
+25:         out.close();
+26:         System.out.println(BufferedInputFile.read(outputFile));
+27:     }
+28: }

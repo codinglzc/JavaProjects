@@ -1,0 +1,27 @@
+1: package Examples;
+2: 
+3: import java.io.*;
+4: 
+5: /**
+6:  * 基本的文件输出
+7:  */
+8: public class BasicFileOutput
+9: {
+10:     static String inputFile = "./IO/src/Examples/BasicFileOutput.java";
+11:     static String outputFile = "./IO/src/Examples/BasicFileOutput.output";
+12: 
+13:     public static void main(String[] args) throws IOException
+14:     {
+15:         BufferedReader in = new BufferedReader(new StringReader(BufferedInputFile.read(inputFile)));
+16:         // 1. 创建一个与指定文件连接的FileWriter
+17:         // 2. 我们通常会用BufferedWriter将其包装起来用以缓冲输出（缓冲往往能显著地增加IO操作的性能）
+18:         // 3. 为了提供格式化机制，用PrintWriter来装饰
+19:         PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(outputFile)));
+20:         int lineCount = 1;
+21:         String s;
+22:         while ((s = in.readLine()) != null)
+23:             out.println(lineCount++ + ": " + s);
+24:         out.close();
+25:         System.out.println(BufferedInputFile.read(outputFile));
+26:     }
+27: }
