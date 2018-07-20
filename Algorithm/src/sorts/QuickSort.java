@@ -1,6 +1,9 @@
 package sorts;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 /**
  * @Description: 快速排序

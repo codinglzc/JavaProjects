@@ -1,7 +1,5 @@
 package concurrency;
 
-import com.sun.xml.internal.bind.v2.model.runtime.RuntimeNonElement;
-
 import java.io.IOException;
 import java.io.PipedReader;
 import java.io.PipedWriter;
