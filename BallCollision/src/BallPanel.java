@@ -367,7 +367,7 @@ public class BallPanel extends JPanel
                 {
                     super.installUI(c);
                     LookAndFeel.installColors(c, "Panel.background",
-                                              "Panel.foreground");
+                            "Panel.foreground");
                 }
             });
         }
@@ -377,17 +377,24 @@ public class BallPanel extends JPanel
          */
         public void addBall(int id)
         {
-            double x = circleX + (Math.random() * 2 - 1) * (radius - Ball.SIZE / 2);   //小球开始的随机x坐标
-            double temp = Math.pow(Math.pow(radius - Ball.SIZE / 2, 2) - Math.pow(x - circleX, 2), 0.5);
-            double y = circleY + (Math.random() * 2 - 1) * temp;   //小球开始的随机y坐标
+            double x, y;
 
             Color[] colors = {Color.green, Color.CYAN, Color.ORANGE, Color.MAGENTA, Color.PINK,
                     Color.YELLOW, Color.RED, new Color(128, 0, 0), new Color(244, 164, 96), new Color(135, 206, 250)};
             Color color;
             if (id <= 10)
+            {
+                x = circleX + Ball.SIZE * id * 2;
+                y = circleY;
                 color = colors[id - 1];  //小球的颜色
-            else
+
+            } else
+            {
+                x = circleX + (Math.random() * 2 - 1) * (radius - Ball.SIZE / 2);   //小球开始的随机x坐标
+                double temp = Math.pow(Math.pow(radius - Ball.SIZE / 2, 2) - Math.pow(x - circleX, 2), 0.5);
+                y = circleY + (Math.random() * 2 - 1) * temp;   //小球开始的随机y坐标
                 color = Color.WHITE;
+            }
 
             balls.add(new Ball(id, x, y, color));   //在小球的列表中加入新球，球的初始方位和颜色为前面的值
         }
@@ -488,6 +495,11 @@ public class BallPanel extends JPanel
             this.x = x;
             this.y = y;
             this.color = color;
+            if(id <= 10)
+            {
+                this.vx = 0;
+                this.vy = 1;
+            }
             collisions.add(new Collision(-1, x, y, -1));
         }
 
