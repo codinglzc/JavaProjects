@@ -72,10 +72,7 @@ public class MergeSort
         }
 
         // 将合并后的辅助数组tmp复制到原数组arr中
-        for (int i = 0; i < tmp.length; i++)
-        {
-            arr[start + i] = tmp[i];
-        }
+        System.arraycopy(tmp, 0, arr, start, tmp.length);
     }
 
     public static void main(String[] args)

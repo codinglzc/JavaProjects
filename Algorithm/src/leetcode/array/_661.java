@@ -2,7 +2,7 @@ package leetcode.array;
 
 /**
  * @Description: 661. Image Smoother
- * Given a 2D integer matrix M representing the gray scale of an image, you need to design a smoother to make the gray
+ * Given a 2D integer matrix M representing the gray scale of an note, you need to design a smoother to make the gray
  * scale of each cell becomes the average gray scale (rounding down) of all the 8 surrounding cells and itself. If a
  * cell has less than 8 surrounding cells, then use as many as you can.
  * <p>

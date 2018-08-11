@@ -11,7 +11,10 @@ package designPatterns.SingletonPattern;
  */
 public class Singleton4
 {
-    private static Singleton4 instance;
+    //    private static Singleton4 instance;
+
+    // 通过volatile关键字来确保安全，防止在执行步骤4的的时候发生重排序
+    private volatile static Singleton4 instance;
 
     private Singleton4()
     {
@@ -19,13 +22,13 @@ public class Singleton4
 
     public static Singleton4 getInstance()
     {
-        if (instance == null)
+        if (instance == null)                       // 1
         {
-            synchronized (Singleton4.class)
+            synchronized (Singleton4.class)         // 2
             {
-                if (instance == null)
+                if (instance == null)               // 3
                 {
-                    instance = new Singleton4();
+                    instance = new Singleton4();    // 4
                 }
             }
         }
