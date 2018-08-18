@@ -87,7 +87,7 @@
         <br>
         反射最重要的用途就是开发各种通用框架。（比如 spring，hibernate，Struts 都是配置化的）<br>
 * 说说自定义注解的场景及实现
-    > 跟踪代码的依赖性，实现代替配置文件的功能。比较常见的是 Spring 等框架中的基于注解配置。<br>
+    > 登陆、权限拦截、日志处理，以及各种 Java 框架，如 Spring，Hibernate，JUnit 提到注解就不能不说反射，Java 自定义注解是通过运行时靠反射获取注解。实际开发中，例如我们要获取某个方法的调用日志，可以通过 AOP（动态代理机制）给方法添加切面，通过反射来获取方法包含的注解，如果包含日志注解，就进行日志记录。反射的实现在 Java 应用层面上讲，是通过对 Class 对象的操作实现的，Class 对象为我们提供了一系列方法对类进行操作。在 JVM 这个角度来说，Class 文件是一组以 8 位字节为基础单位的二进制流，各个数据项目按严格的顺序紧凑的排列在 Class 文件中，里面包含了类、方法、字段等等相关数据。通过对 Class 数据流的处理我们即可得到字段、方法等数据。
 * JDBC 流程
     > 1.加载 Driver 类，注册数据库驱动；<br>
       2.通过 DriverManager，使用 url，用户名和密码建立连接(Connection)；<br>
@@ -129,6 +129,12 @@
       前的唯一选择，但程序直观简单易理解。<br>
       NIO 方式适用于连接数目多且连接比较短（轻操作）的架构，比如聊天服务器，并发局限于应用中，编程比较复杂，
       JDK1.4 开始支持。
+      <h4>1、Buffer（缓冲区）</h4>
+      使用数组的方式不够灵活且性能差，Java NIO的缓冲区功能更加强大；容量(capacity)表示缓冲区的额定大小，需要在创建时指定（allocate静态方法）；读写限制(limit)表示缓冲区在进行读写操作时的最大允许位置；读写位置(position)表示当前进行读写操作时的位置；缓冲区的很多操作（clear、flip、rewind）都是操作limit和position的值来实现重复读写；
+      <h4>2、Channel（通道）</h4>
+      channel表示为一个已经建立好的支持I/O操作的实体（如文件和网络）的连接，在此连接上进行数据的读写操作，使用的是缓冲区来实现读写。
+      <h4>3、Selector（多路复用器）</h4>
+      套接字通道的多路复用的思想比较简单，通过一个专门的选择器（Selector）来同时对多个套接字通道进行监听；当其中的某些套接字通道上有它感兴趣的事件发生时，这些通道就会变为可用状态，可以在选择器的选择操作中被选中；可用通道的选择一般是通过操作系统提供的底层操作系统调用来实现的，性能也比较高。
 * [动态加载类的框架了解哪些？](https://www.liaoxuefeng.com/article/0014617596492474eea2227bf04477e83e6d094683e0536000)
     > CGlib 和 javassist
 * [动态代理一般有哪几种实现方式？](https://blog.csdn.net/heyutao007/article/details/49738887)
@@ -148,11 +154,14 @@
       4.将所有可变的成员声明为final，这样只能对它们赋值一次<br>
       5.通过构造器初始化所有成员，进行深拷贝(deep copy)<br>
       6.在getter方法中，不要直接返回对象本身，而是克隆对象，并返回对象的拷贝<br>
+* [十道海量数据处理面试题与十个方法大总结](https://blog.csdn.net/v_JULY_v/article/details/6279498)
+* [二叉查找树，红黑树，AVL树，B~/B+树(B-tree)，伸展树——优缺点及比较](https://blog.csdn.net/bytxl/article/details/40920165)
 
 ### Java 虚拟机（JVM）
 * [JVM 内存模型](http://gityuan.com/2016/01/09/java-memory/)
     > 线程私有的：程序计数器、虚拟机栈、本地方法栈。<br>
       线程共享的：堆， 方法区（包含常量池）。<br>
+* [Linux与JVM的内存关系分析](http://www.importnew.com/14486.html)      
 * [内存溢出一般发生在哪个区？](https://www.cnblogs.com/xiaoxi/p/7406903.html)
   [永久代会不会导致内存溢出？（OMM）](https://blog.csdn.net/qq_28165595/article/details/79246922)
     > <h4>内存溢出一般发生在哪个区？</h4>
@@ -210,7 +219,7 @@
         4.**分代收集算法：** 不同的对象的生命周期是不一样的。因此，不同生命周期的对象可以采取不同的回收算法，以便提高回收效率。<br>
           **年轻代**<br>
           1.所有新生成的对象首先都是放在新生代中。<br>
-          2.新生代内存按照 8:0:1 的比例分为一个 eden 区和两个 survivor 区。<br>
+          2.新生代内存按照 8:1:1 的比例分为一个 eden 区和两个 survivor 区。<br>
           3.当 survivor1 区不足以存放 eden 区和 survivor0 区的存活对象时，就将存活对象直接放到老年代。若老年代也满，
             就会触发一次 Full GC，也就是新生代、老年代都进行回收。<br>
           4.新生代发生的 GC 也叫做 Minor GC，Minor GC 发生频率比较高（一般是Eden区满了触发）。<br>
@@ -234,6 +243,7 @@
         CMS(Concurrent Mark Sweep)收集器（标记-清理算法）<br>
         　　高并发、低停顿，追求最短GC回收停顿时间，cpu占用比较高，响应时间快，停顿时间短，多核cpu 追求高响应时间的选择<br>
 * [java类加载机制？如何实现自定义类加载器？findClass与loadClass的区别？](https://blog.csdn.net/javazejian/article/details/73413292)
+* [G1 和 CMS收集器的区别](http://www.woowen.com/java/2016/12/10/G1%20CMS%E5%8C%BA%E5%88%AB/)
 
 ### 集合
 * List 和 Set 区别
@@ -269,7 +279,7 @@
       黑树的转换。<br>
 * [HashMap 的工作原理及代码实现](https://blog.csdn.net/zxt0601/article/details/77413921)
     > 扩容因子LoadFactor=0.75，初始大小InitailCapacity=16 <br>
-      纵向——底层实现：数组 + 链表 + 红黑树（jdk1.8之后对链表节点到达8之后转换为红黑书） <br>
+      纵向——底层实现：数组 + 链表 + 红黑树（jdk1.8之后对链表节点到达8之后转换为红黑树） <br>
       横向——HashMap为线程不安全，多线程操作会导致其死循环的，主要原因在于resize()扩容阶段。
 * [ConcurrentHashMap 的工作原理及代码实现](http://www.iocoder.cn/JUC/sike/ConcurrentHashMap/)
     > 1.8之前采用分段锁，其目的就是降低同步锁的粒度。<br>
@@ -315,8 +325,16 @@
       <h4>join()</h4> 
       join() 方法会使当前线程等待调用 join() 方法的线程结束后才能继续执行。<br>
 * [说说 CountDownLatch 原理](http://www.iocoder.cn/JUC/sike/CountDownLatch/)
+    > CountDownLatch 内部通过共享锁实现。（基于AQS）<br>
+      1.在创建 CountDownLatch 实例时，需要传递一个int型的参数：count，该参数为计数器的初始值，也可以理解为该共享锁可以获取的总次数。<br>
+      2.当某个线程调用 #await() 方法，程序首先判断 count 的值是否为 0 ，如果不为 0 的话，则会一直等待直到为 0 为止。<br>
+      3.当其他线程调用 #countDown() 方法时，则执行释放共享锁状态，使 count 值 - 1。<br>
+      4.当在创建 CountDownLatch 时初始化的 count 参数，必须要有 count 线程调用#countDown() 方法，才会使计数器 count 等于 0 ，锁才会释放，前面等待的线程才会继续运行。<br>
+      5.注意 CountDownLatch 不能回滚重置。<br>
 * [说说 CyclicBarrier 原理](http://www.iocoder.cn/JUC/sike/CyclicBarrier/)
+    > 基于重入锁 ReentrantLock 和 Condition。<br>
 * [说说 Semaphore 原理](http://www.iocoder.cn/JUC/sike/Semaphore/)
+    > 和CountDownLatch 一样，内部通过共享锁实现。（基于AQS实现了非公平和公平锁）
 * [说说 Exchanger 原理](http://www.iocoder.cn/JUC/sike/Exchanger/)
 * 说说 CountDownLatch 与 CyclicBarrier 区别
     > 1.CountDownLatch 简单的说就是一个线程等待，直到他所等待的其他线程都执行完成并且调用
@@ -618,7 +636,6 @@
           <br>
       3.2 总结<br>
           MyISAM更适合读密集的表，而InnoDB更适合写密集的表。<br>
-          在数据库做主从分离的情况下，经常选择MyISAM作为主库的存储引擎。<br>
 * [数据库索引的原理](https://blog.csdn.net/suifeng3051/article/details/52669644)
 * 为什么要用 B-tree
     > B-tree中一次检索最多需要（深度-1）次I/O（根节点常驻内存），渐进复杂度为 O(h)=O(logdN)。
@@ -628,19 +645,31 @@
       聚集索引：主索引的叶结点 data 域中存储的是数据记录，辅助索引的叶节点 data 域中存储的是主索引，也就是说数据就是索引；<br>
       非聚集索引：主索引和辅助索引的叶结点 data 域中存储的是数据记录的地址，也就是说索引和数据时分离的。
 * [limit 20000 加载很慢怎么解决](http://www.funtl.com/2018/04/08/interview/Java-%E9%9D%A2%E8%AF%95%E5%AE%9D%E5%85%B8-limit-20000-%E5%8A%A0%E8%BD%BD%E5%BE%88%E6%85%A2%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3/)
-* [选择合适的分布式主键方案](https://my.oschina.net/dolphinboy/blog/864567)
+* [选择合适的分布式主键方案](https://blog.csdn.net/chenshun123/article/details/79588208)
+    > 1.通过应用程序生成一个 GUID，然后和数据一起插入切分后的集群 <br>
+      2.通过独立的应用程序事先在数据库中生成一系列唯一的 ID，各应用程序通过接口或者自己去读取再和数据一起插入到切分后的集群中 <br>
+      3.通过集群编号加集群内的自增 (auto_increment类型) 两个字段 共同组成唯一主键 <br>
+      4.通过设置每个集群中自增 ID 起始点 (auto_increment_offset)，将各个集群的 ID 进行绝对的分段来实现全局唯一。当遇到某个集群数据 <br>
+      5.Redis 生成 ID <br>
+      6.Twitter 的 snowflake 算法 <br>
+      7.利用 zookeeper 生成唯一 ID <br>
+      8.MongoDB 的 ObjectId <br>
 * [数据库的脏读、不可重复读和幻读](http://dr-yanglong.github.io/2016/06/06/transaction-feature/)
 * [选择合适的数据存储方案](http://blog.720ui.com/2017/db_better_db_use/)
-* [ObjectId 规则](https://blog.csdn.net/liuzx32/article/details/55511216)
+* [SQL 和 NoSQL 的区别](https://www.jianshu.com/p/b32fe4fe45a3)
+* [ObjectId 规则](http://www.funtl.com/2018/04/08/interview/Java-%E9%9D%A2%E8%AF%95%E5%AE%9D%E5%85%B8-ObjectId-%E8%A7%84%E5%88%99/)
 * [聊聊 MongoDB 使用场景](http://blog.720ui.com/2017/mongodb_core_use/)
 * [倒排索引](https://blog.csdn.net/u011239443/article/details/60604017)
 * [聊聊 ElasticSearch 使用场景](https://www.jianshu.com/p/ed80664141a5)
 * [数据库事务ACID的描述和隔离级别](https://blog.csdn.net/qq_27409289/article/details/73348186)
+* [MVCC 多版本控制](https://segmentfault.com/a/1190000012650596)
 
 ### 缓存使用
+* [Redis 和 Memcached 的区别](http://www.infoq.com/cn/articles/tq-why-choose-redis)
 * Redis 有哪些类型
     > Redis 支持 5 种数据类型：string（字符串），hash（哈希），list（列表），set（集合）和 zset（有序集合）。<br>
 * [Redis 内部结构](https://www.jianshu.com/p/f09480c05e42)
+* [Redis-内存淘汰机制](http://www.funtl.com/2018/04/08/interview/Java-%E9%9D%A2%E8%AF%95%E5%AE%9D%E5%85%B8-Redis-%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E6%9C%BA%E5%88%B6/)
 * [聊聊 Redis 使用场景](https://juejin.im/post/5a24c6f2f265da431d3c8204)
 * [Redis 持久化机制](https://blog.csdn.net/zhanglh046/article/details/78630469)
 * Redis 如何实现持久化
@@ -696,7 +725,7 @@
 * [Spring 事务实现方式（编程式事务和声明式事务）](https://blog.csdn.net/liaohaojian/article/details/70139151)
 * [Spring 事务底层原理](https://blog.csdn.net/TVwR8OfV0P/article/details/79084032)
 * [Spring 如何自定义注解实现功能](https://www.jianshu.com/p/7c2948f64b1c)
-* [Spring MVC 运行流程](https://blog.csdn.net/J080624/article/details/77990164)
+* [Spring MVC 运行流程](https://www.jianshu.com/p/8a20c547e245)
 * [Spring MVC 启动流程](https://www.jianshu.com/p/dc64d02e49ac)
 * [Spring 的单例实现原理](https://juejin.im/post/594084fd61ff4b006cb425f1)
 * [Spring 框架中用到了哪些设计模式](https://www.ibm.com/developerworks/cn/java/j-lo-spring-principle/index.html)
@@ -786,17 +815,23 @@
 * 如何应对微服务的链式调用异常
 * 对于快速追踪与定位问题
 * 微服务的安全
+* [服务降级](http://fengfu.io/2017/04/23/%E6%9C%8D%E5%8A%A1%E5%8C%96%E6%9E%B6%E6%9E%84-%E6%9C%8D%E5%8A%A1%E9%99%8D%E7%BA%A7/)
 
 ### 分布式
 * 谈谈业务中使用分布式的场景
+* [一致性哈希](https://blog.csdn.net/lihao21/article/details/54193868)
 * Session 分布式方案
+* [ZooKeeper介绍及典型使用场景](https://blog.csdn.net/liuxinghao/article/details/42747625)
 * 分布式锁的场景
-* 分布式锁的实现方案
-    > [基于Redis的分布式锁](https://crossoverjie.top/2018/03/29/distributed-lock/distributed-lock-redis/)
+* [分布式锁的实现方案](https://juejin.im/entry/5a502ac2518825732b19a595)
+    > 基于数据库：一是基于数据库表(唯一约束性)，另一种是基于数据库排他锁(for update)。<br>
+      [基于Redis的分布式锁](https://crossoverjie.top/2018/03/29/distributed-lock/distributed-lock-redis/)<br>
+      基于zookeeper临时有序节点
 * 分布式事务
-* 集群与负载均衡的算法与实现
-* 说说分库与分表设计
-* 分库与分表带来的分布式困境与应对之策
+* [集群与负载均衡的算法与实现](https://blog.csdn.net/i_chenjiahui/article/details/46419465)
+* [说说分库与分表设计](http://www.infoq.com/cn/articles/key-steps-and-likely-problems-of-split-table)
+* [分库与分表带来的分布式困境与应对之策](http://blog.720ui.com/2017/mysql_core_09_multi_db_table2/)
+* [MySQL 主从分离原理和实践](http://techlog.cn/article/list/10182736)
 
 ## 安全&性能
 ### 安全问题
