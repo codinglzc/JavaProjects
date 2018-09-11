@@ -119,7 +119,7 @@
     > <h4>BIO 和 NIO 的区别</h4>
       1.BIO 是同步阻塞的，NIO 是同步非阻塞的。<br>
       2.使用 BIO 的时候往往会引入多线程，每个连接一个单独的线程；而 NIO 则是使用单线程或者只使用少量的线程，
-      每个连接共用一个线程。<br>
+      多个连接共用一个线程。<br>
       Java BIO：同步并阻塞，服务器实现模式为一个连接一个线程，即客户端有连接请求时服务器端就需要启动一个线程
       进行处理，如果这个连接不做任何事情会造成不必要的线程开销，当然可以通过线程池机制改善。<br>
       Java NIO：同步非阻塞，服务器实现模式为一个请求一个线程，即客户端发送的连接请求都会注册到多路复用器上，
@@ -135,12 +135,12 @@
       channel表示为一个已经建立好的支持I/O操作的实体（如文件和网络）的连接，在此连接上进行数据的读写操作，使用的是缓冲区来实现读写。
       <h4>3、Selector（多路复用器）</h4>
       套接字通道的多路复用的思想比较简单，通过一个专门的选择器（Selector）来同时对多个套接字通道进行监听；当其中的某些套接字通道上有它感兴趣的事件发生时，这些通道就会变为可用状态，可以在选择器的选择操作中被选中；可用通道的选择一般是通过操作系统提供的底层操作系统调用来实现的，性能也比较高。
+* [深入理解并发 / 并行，阻塞 / 非阻塞，同步 / 异步](https://juejin.im/entry/58ae4636b123db0052b1caf8)
 * [动态加载类的框架了解哪些？](https://www.liaoxuefeng.com/article/0014617596492474eea2227bf04477e83e6d094683e0536000)
     > CGlib 和 javassist
 * [动态代理一般有哪几种实现方式？](https://blog.csdn.net/heyutao007/article/details/49738887)
     > jdk动态代理和cglib动态代理。<br>
-    
-  动态代理的应用场景有哪些？
+* 动态代理的应用场景有哪些？
     > 代理的使用场景很多，struts2中的 action 调用， hibernate的懒加载， spring的 AOP无一不用到代理。<br>
     总结起来可分为以下几类： <br>
       1. 在原方法执行之前和之后做一些操作，可以用代理来实现（比如记录Log，做事务控制等）。<br> 
@@ -156,6 +156,11 @@
       6.在getter方法中，不要直接返回对象本身，而是克隆对象，并返回对象的拷贝<br>
 * [十道海量数据处理面试题与十个方法大总结](https://blog.csdn.net/v_JULY_v/article/details/6279498)
 * [二叉查找树，红黑树，AVL树，B~/B+树(B-tree)，伸展树——优缺点及比较](https://blog.csdn.net/bytxl/article/details/40920165)
+* [进程间通信IPC](https://www.jianshu.com/p/c1015f5ffa74)
+* [理解滑动窗口算法](https://blog.csdn.net/renhui1993/article/details/72123455)
+* [Linux 进程调度浅析](http://blog.jobbole.com/106168/)
+* [Linux查看机器负载](https://blog.csdn.net/szchtx/article/details/38455385)
+* [输入URL后的处理流程](https://segmentfault.com/a/1190000012092552)
 
 ### Java 虚拟机（JVM）
 * [JVM 内存模型](http://gityuan.com/2016/01/09/java-memory/)
@@ -193,7 +198,7 @@
        2.使用 jmap -dump:live,file=b.map PID 将 live 进程生成 java 堆转储快照；<br>
        使用 jmap -heap PID 生成 java 堆的详细信息；<br>
        使用 jmap -histo PID 生成 java 堆中对象的相关信息，包含数量以及占用的空间大小。<br>
-      <h4>2.jstat</h4>
+      <h4>2.[jstat](https://blog.csdn.net/zlzlei/article/details/46471627)</h4>
        主要是用来监控 heap size 和 jvm垃圾回收情况，尤其是gc情况的监控，如果老年代发生full gc，那么
        很可能会导致内存泄漏的可能性。
       <h4>jstack</h4>
@@ -243,7 +248,13 @@
         CMS(Concurrent Mark Sweep)收集器（标记-清理算法）<br>
         　　高并发、低停顿，追求最短GC回收停顿时间，cpu占用比较高，响应时间快，停顿时间短，多核cpu 追求高响应时间的选择<br>
 * [java类加载机制？如何实现自定义类加载器？findClass与loadClass的区别？](https://blog.csdn.net/javazejian/article/details/73413292)
+* [有哪些破坏双亲委派模式？以及如何破坏？](https://blog.csdn.net/dangwanma6489/article/details/80244981)
+    > 破坏双亲委派模式一般需要继承ClassLoader，重写loadClass()和findClass()。<br>
+      1.当父类加载器需要子类加载器加载类时，可以使用线程上下文加载器。（如JNDI，JDBC等）<br>
+      2.为了实现热插拔，热部署，模块化功能，只需要将被加载的类和类加载器一同换掉就可以实现代码的热替换。（如Tomcat中，当JSP被修改后，不需要重启服务器就可以生成新的类。）<br>
 * [G1 和 CMS收集器的区别](http://www.woowen.com/java/2016/12/10/G1%20CMS%E5%8C%BA%E5%88%AB/)
+* [jvm调优](https://juejin.im/post/59f02f406fb9a0451869f01c)
+
 
 ### 集合
 * List 和 Set 区别
@@ -350,6 +361,7 @@
 * [ThreadLocal 原理分析](http://www.iocoder.cn/JUC/sike/ThreadLocal/)
 * [java线程池？线程池构造函数的几个参数含义？keepAliveTime解释一下？](http://www.iocoder.cn/JUC/sike/ThreadPoolExecutor/)
 * [线程的生命周期](https://github.com/codinglzc/JavaProjects/tree/master/JavaNotes/src/concurrency/note/线程状态图.jpg)
+* [J.U.C Future 和 FutureTask](https://www.jianshu.com/p/e043f83b8862)
 
 ### 锁机制
 * 说说线程安全问题
@@ -392,6 +404,11 @@
     首先检查当前引用是否等于预期引用，并且当前标志是否等于预期标志，如果全部相等，则以原子方式
     将该引用和该标志的值设置为给定的更新值。
 * 乐观锁的业务场景及实现方式
+* 产生死锁的 4 个必要条件
+    > 1.互斥条件<br>
+      2.占有且等待<br>
+      3.不可强行占有<br>
+      4.循环等待条件<br>
 
 ### Web 
 * HTTP 请求的 GET 与 POST 方式的区别
@@ -480,6 +497,7 @@
       2.服务器——收到这个 FIN，它发回一个 ACK，确认序号为收到的序号加 1。和 SYN 一样，一个 FIN 将占用一个序号<br>
       3.服务器——关闭与客户端的连接，发送一个 FIN 给客户端<br>
       4.客户端——发回 ACK 报文确认，并将确认序号设置为序号加 1<br>
+* [TCP 的流量控制和拥塞控制](https://blog.csdn.net/yechaodechuntian/article/details/25429143)
 * 输入url到页面加载都发生了什么事情？（面试中最最长问的）
     > 1.输入地址<br>
       2.浏览器查找域名的IP地址，这一步包括DNS具体的查找过程，比如：浏览器缓存，系统缓存，路由器缓存。。。<br>
@@ -491,11 +509,23 @@
       8.浏览器显示 HTML <br>
       9.浏览器发送请求获取嵌入在 HTML 中的资源（如图片、音频、视频、CSS/JS 等等）
       10.浏览器发送异步请求，渲染界面
+* [HTTP 和 HTTPS 的区别](https://juejin.im/entry/58d7635e5c497d0057fae036)
+* [非对称加密和对称加密](https://blog.csdn.net/u013320868/article/details/54090295)
 * MVC 设计思想
     > MVC将应用程序划分为实体（Model）、视图（View）和控制（Controller）三个逻辑部件，具有逻辑复用、松耦合等特点。
+* [HTTP 2.0 相比 HTTP 1.1 的改进](https://www.zhihu.com/question/34074946)
 
 ## 核心篇
 ### 数据存储
+* [如何查找MySQL中查询慢的SQL语句](https://blog.csdn.net/qq_29663071/article/details/76924072)
+    > 1.slow_query_log<br>
+      这个参数设置为ON，可以捕获执行时间超过一定数值的SQL语句。<br>
+      2.long_query_time<br>
+      当SQL语句执行时间超过此数值时，就会被记录到日志中，建议设置为1或者更短。<br>
+      3.slow_query_log_file<br>
+      记录日志的文件名。<br>
+      4.log_queries_not_using_indexes<br>
+      这个参数设置为ON，可以捕获到所有未使用索引的SQL语句，尽管这个SQL语句有可能执行得挺快。<br>
 * [MySQL 索引使用的注意事项](http://www.yuanrengu.com/index.php/2017-01-13.html)
 * [说说分库与分表设计](http://www.infoq.com/cn/articles/key-steps-and-likely-problems-of-split-table)
 * [分库与分表带来的分布式困境与应对之策](http://blog.720ui.com/2017/mysql_core_09_multi_db_table2/)
@@ -826,12 +856,13 @@
 * [分布式锁的实现方案](https://juejin.im/entry/5a502ac2518825732b19a595)
     > 基于数据库：一是基于数据库表(唯一约束性)，另一种是基于数据库排他锁(for update)。<br>
       [基于Redis的分布式锁](https://crossoverjie.top/2018/03/29/distributed-lock/distributed-lock-redis/)<br>
-      基于zookeeper临时有序节点
+      [基于zookeeper临时有序节点](http://www.dengshenyu.com/java/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/2017/10/23/zookeeper-distributed-lock.html)
 * 分布式事务
 * [集群与负载均衡的算法与实现](https://blog.csdn.net/i_chenjiahui/article/details/46419465)
 * [说说分库与分表设计](http://www.infoq.com/cn/articles/key-steps-and-likely-problems-of-split-table)
 * [分库与分表带来的分布式困境与应对之策](http://blog.720ui.com/2017/mysql_core_09_multi_db_table2/)
 * [MySQL 主从分离原理和实践](http://techlog.cn/article/list/10182736)
+* [高并发系统限流方式](http://jinnianshilongnian.iteye.com/blog/2305117)
 
 ## 安全&性能
 ### 安全问题
